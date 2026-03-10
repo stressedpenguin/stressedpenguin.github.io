@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <title>Focus test</title>
+    </head>
+    <body style="background-color: rgb(254,224,163); text-align:center;">
+        <h2 id="instruction">
+        3/3: 2-Back test<br>
+        Letters will be presented on your screen 1 at a time.<br>
+        Press SPACEBAR when a letter appears that is the same 2 letters ago<br>
+        You will not be timed, but letters will pass by every second, so think quickly and focus!<br>
+        Press space to start.<br>
+        <img src="instruction.png"></img>
+        </h2>
+
+        <p id="trialinfo"></p>
+    </body>
+
+    <script>
+        let letters = "ACDEFGHLS"
+
+let trials = 30
+let trialNum = 0
+
+let sequence = []
+let results = []
+
+let started = false
+let awaitingResponse = false
+let pressed = false
+
+let trialinfo = document.getElementById("trialinfo")
+
+let matchProbability = 0.3   // 30% matches
+
+let stimulus = document.createElement("h1")
+stimulus.style.fontSize = "100px"
+document.body.appendChild(stimulus)
+
+let star = document.createElement("p")
+star.textContent = "★"
+star.style.fontSize = "40px"
+star.style.marginTop = "-40px"
+star.style.display = "none"
+document.body.appendChild(star)
+
+function randomLetter(){
+    return letters[Math.floor(Math.random()*letters.length)]
+}
+
+function nextTrial(){
+
+    trialNum++
+    trialinfo.textContent = "Trial " + trialNum + " / " + trials
+
+    if(trialNum > trials){
+        endTest()
+        return
+    }
+
+    pressed = false
+
+    let letter
+
+        if(sequence.length >= 2 && Math.random() < matchProbability){
+        letter = sequence[sequence.length - 2]   // copy the 2-back letter
+        }else{
+        letter = randomLetter()
+        }
+
+    sequence.push(letter)
+
+    stimulus.textContent = letter
+
+    awaitingResponse = true
+
+    setTimeout(function(){
+
+        awaitingResponse = false
+
+        let match = false
+
+        if(sequence.length > 2){
+            match = (sequence[sequence.length-1] === sequence[sequence.length-3])
+        }
+
+        let correct = false
+
+        if(match && pressed) correct = true
+        if(!match && !pressed) correct = true
+
+        results.push({
+            trial: trialNum,
+            letter: letter,
+            match: match,
+            pressed: pressed,
+            correct: correct
+        })
+star.style.display = "none"
+        if(correct){
+            stimulus.innerHTML = '<img src="correct.png" align="left" width="120">'
+        }else{
+            stimulus.innerHTML = '<img src="wrong.png" align="left" width="120">'
+        }
+
+        setTimeout(function(){
+            stimulus.textContent = ""
+            nextTrial()
+        },1500)
+
+    },1200)
+}
+
+document.addEventListener("keydown", function(e){
+
+    if(e.code === "Space" && !started){
+        started = true
+        document.getElementById("instruction").style.display = "none"
+        nextTrial()
+        return
+    }
+
+    if(e.code === "Space" && awaitingResponse && !pressed){
+        pressed = true
+        star.style.display = "block"
+    }
+
+})
+
+function endTest(){
+
+    stimulus.textContent = "Test finished"
+
+    sessionStorage.setItem("nbackResults", JSON.stringify(results))
+
+    let btn = document.createElement("button")
+    btn.textContent = "Results"
+    btn.onclick = function(){
+        window.location.href = "5results.html"
+    }
+
+    document.body.appendChild(document.createElement("br"))
+    document.body.appendChild(btn)
+}
+    </script>
+</html>

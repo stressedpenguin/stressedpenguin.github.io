@@ -1,0 +1,153 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Focus Test</title>
+</head>
+
+<body style="background-color: rgb(254,224,163); text-align:center;">
+<button id="indoButton" onclick="window.location.href='3STROOP.html'">
+I am more confortable with English
+</button>
+<h2 id="instruction">
+2/3: Stroop Test <br>
+Tekan H jika warna tulisannya HIJAU, tekan B jika warna tulisannya BIRU, dan tekan M jika warna tulisannya MERAH<br>
+Abaikan katanya.<br><br>
+<p>(Trial 5 pertama tidak diskor, dan Anda akan diukur waktunya!)</p>
+Contoh:<br>
+<p style="color:red">BIRU</p>
+Tekan M pada keyboard karena warnanya merah.<br>
+Tekan space untuk mulai.<br>
+</h2>
+
+<p id="trialinfo"></p>
+<h1 id="stimulus" style="font-size:80px;"></h1>
+
+<script>
+
+let words = ["HIJAU","BIRU","MERAH"]
+let colors = ["green","blue","red"]
+
+let trials = 20
+let trialNum = 0
+
+let startTime
+let currentColor
+
+let experimentFinished = false
+
+let results = []
+let correctCount = 0
+let wrongCount = 0
+
+let currentCongruent
+
+let wordColorMap = {
+    "HIJAU": "green",
+    "BIRU": "blue",
+    "MERAH": "red"
+}
+
+function randomItem(arr){
+    return arr[Math.floor(Math.random()*arr.length)]
+}
+
+function nextTrial(){
+
+    if(trialNum >= trials){
+        endTest()
+        return
+    }
+
+    trialNum++
+
+    let word = randomItem(words)
+    let color = randomItem(colors)
+    
+    currentCongruent = (wordColorMap[word] === color)
+    currentColor = color
+
+    let stim = document.getElementById("stimulus")
+    stim.textContent = word
+    stim.style.color = color
+
+    startTime = performance.now()
+
+     document.getElementById("trialinfo").textContent =
+        "Trial " + trialNum + " / " + trials
+}
+
+function handleResponse(key){
+
+    if(trialNum === 0) return
+    if(document.getElementById("stimulus").textContent === "") return
+
+    let reaction = performance.now() - startTime
+
+    let correct = false
+
+    if(key === "h" && currentColor === "green") correct = true
+    if(key === "b" && currentColor === "blue") correct = true
+    if(key === "m" && currentColor === "red") correct = true
+
+    if(correct){
+        correctCount++
+    }else{
+        wrongCount++
+    }
+
+    results.push({
+    trial: trialNum,
+    type: currentCongruent ? "Con" : "InCon",
+    rt: Math.round(reaction),
+    correct: correct
+})
+    let stim = document.getElementById("stimulus")
+
+if(correct){
+    stim.innerHTML = '<img src="correct.png" width="120">'
+}else{
+    stim.innerHTML = '<img src="wrong.png" width="120">'
+}
+
+setTimeout(function(){
+    stim.innerHTML = ""
+    nextTrial()
+}, 1000)
+}
+
+function endTest(){
+
+    experimentFinished = true
+
+    document.getElementById("stimulus").textContent = "Test finished"
+
+    let avg = results.reduce((sum, t) => sum + t.rt, 0) / results.length
+
+    sessionStorage.setItem("stroopResults", JSON.stringify(results))
+
+    document.getElementById("trialinfo").innerHTML =
+        "Average RT: " + Math.round(avg) + " ms<br>" +
+        "Correct: " + correctCount + "<br>" +
+        "Wrong: " + wrongCount + "<br><br>" +
+        "<button onclick=\"window.location.href='4nback.html'\">Next Test</button>"
+}
+
+document.addEventListener("keydown", function(e){
+
+    if(experimentFinished) return
+
+    if(e.code === "Space" && trialNum === 0){
+        document.getElementById("instruction").textContent = ""
+        document.getElementById("indoButton").style.display = "none"
+        nextTrial()
+    }
+
+    if(e.key === "h" || e.key === "b"|| e.key === "m"){
+        handleResponse(e.key)
+    }
+
+})
+</script>
+
+</body>
+</html>

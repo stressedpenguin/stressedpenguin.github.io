@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Focus Test</title>
+</head>
+
+<body style="background-color: rgb(254,224,163); text-align:center;">
+
+<h1>Results<br>Please copy paste this into the google form :]</h1>
+<h4>I hope you had fun because I did not</h4>
+<img src="m.jpg" style="max-width:120px">
+
+<h2>Reaction Test</h2>
+<pre id="reaction"></pre>
+
+<h2>Stroop Test</h2>
+<pre id="stroop"></pre>
+
+<h2>2-Back Test</h2>
+<pre id="nback"></pre>
+
+<script>
+
+// REACTION TEST
+let reaction = JSON.parse(sessionStorage.getItem("reactionResults"))
+
+if(reaction){
+    document.getElementById("reaction").textContent =
+        reaction.join(" ms\n") + " ms"
+}else{
+    document.getElementById("reaction").textContent = "No data"
+}
+
+
+// STROOP TEST
+let stroop = JSON.parse(sessionStorage.getItem("stroopResults"))
+
+if(stroop){
+
+    let text = ""
+
+    stroop.forEach(t => {
+        text += `${t.trial} ${t.type} ${t.rt} ${t.correct ? "correct" : "wrong"}\n`
+    })
+
+    document.getElementById("stroop").textContent = text
+
+}else{
+    document.getElementById("stroop").textContent = "No data"
+}
+
+
+// NBACK TEST
+let nback = JSON.parse(sessionStorage.getItem("nbackResults"))
+
+if(nback){
+
+    let text = ""
+
+    nback.forEach(t => {
+        text += `${t.trial} ${t.letter} match:${t.match} pressed:${t.pressed} correct:${t.correct}\n`
+    })
+
+    document.getElementById("nback").textContent = text
+
+}else{
+    document.getElementById("nback").textContent = "No data"
+}
+
+</script>
+
+</body>
+</html>
