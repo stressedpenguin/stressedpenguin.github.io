@@ -64,7 +64,7 @@ const handleClick = event => {
 	            nextButton.style.marginTop = "20px"
 
 	            nextButton.onclick = function(){
-		        window.location.href = "3stroop.html"
+		        window.location.href = "3STROOP.html"
 	}
 
 	            document.body.appendChild(nextButton)
@@ -84,4 +84,5 @@ document.addEventListener('keydown', function(e){
 		handleClick(e)
 	}
 })
+
 clickarea.addEventListener('touchstart', handleClick)
