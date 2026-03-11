@@ -17,7 +17,7 @@
     </body>
 
     <script>
-        let letters = "ACDEFGHLS"
+        let letters = "ABCDEFG"
 
 let trials = 30
 let trialNum = 0
@@ -50,6 +50,14 @@ function randomLetter(){
 
 function nextTrial(){
 
+    let forceNoMatch = false
+
+    if(results.length >= 2){
+    if(results[results.length-1].match && results[results.length-2].match){
+        forceNoMatch = true
+    }
+    }
+    
     trialNum++
     trialinfo.textContent = "Trial " + trialNum + " / " + trials
 
@@ -61,12 +69,21 @@ function nextTrial(){
     pressed = false
 
     let letter
+    let willMatch = false
 
-        if(sequence.length >= 2 && Math.random() < matchProbability){
-        letter = sequence[sequence.length - 2]   // copy the 2-back letter
-        }else{
-        letter = randomLetter()
+    if(sequence.length >= 2 && !forceNoMatch && Math.random() < matchProbability){
+    letter = sequence[sequence.length - 2]   // create match
+    willMatch = true
+    }else{
+    letter = randomLetter()
+
+    // prevent accidental match ONLY if we are not forcing one
+    if(sequence.length >= 2){
+        while(letter === sequence[sequence.length - 2]){
+            letter = randomLetter()
         }
+    }
+    }
 
     sequence.push(letter)
 
