@@ -5,6 +5,7 @@ let timer = null
 let trialCount = 0
 let maxTrials = 9
 let results = []
+let testFinished = false
 
 const clickarea = document.querySelector('.clickarea')
 const message = document.querySelector('.message')
@@ -24,6 +25,7 @@ const updateText = (messageText, noteText) => {
 const handleClick = event => {
 	event.preventDefault()
 	event.stopPropagation()
+	if(testFinished) return
 	
 	if (!testStarted) {
 		const msUntilGreen = randomNumber(3, 8)
@@ -54,6 +56,7 @@ const handleClick = event => {
             trialCount++
 
                 if(trialCount >= maxTrials){
+				testFinished = true
 	            clickarea.classList.remove('green')
 	            updateText("Test finished, scroll down for next test")
 	            sessionStorage.setItem("reactionResults", JSON.stringify(results))
@@ -86,3 +89,4 @@ document.addEventListener('keydown', function(e){
 })
 
 clickarea.addEventListener('touchstart', handleClick)
+
