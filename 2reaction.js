@@ -6,6 +6,7 @@ let trialCount = 0
 let maxTrials = 9
 let results = []
 let testFinished = false
+let reactionTimes = []
 
 const clickarea = document.querySelector('.clickarea')
 const message = document.querySelector('.message')
@@ -20,6 +21,21 @@ const randomNumber = (min, max, int = false) => {
 const updateText = (messageText, noteText) => {
 	message.textContent = messageText
 	note.textContent = noteText
+}
+
+function calculateAverageRT(){
+
+    // trials 2–9
+    let analyzed = results.slice(1,9)
+
+    // remove distraction responses
+    let filtered = analyzed.filter(rt => rt <= 1000)
+
+    let sum = filtered.reduce((a,b)=>a+b,0)
+
+    let avg = filtered.length ? sum / filtered.length : 0
+
+    return avg
 }
 
 const handleClick = event => {
@@ -61,7 +77,9 @@ const handleClick = event => {
 	            updateText("Test finished, scroll down for next test")
 	            sessionStorage.setItem("reactionResults", JSON.stringify(results))
                 note.textContent = "Results: " + results.join(", ") + " ms"
-                let nextButton = document.createElement("button")
+            let avgRT = calculateAverageRT()
+			note.textContent += " | Avg (trials 2-9): " + avgRT.toFixed(1) + " ms"
+				let nextButton = document.createElement("button")
 	            nextButton.textContent = "Next Test"
 	            nextButton.style.fontSize = "20px"
 	            nextButton.style.marginTop = "20px"
@@ -71,7 +89,7 @@ const handleClick = event => {
 	}
 
 	            document.body.appendChild(nextButton)
-            
+           
             }
 
                 else{
@@ -89,4 +107,3 @@ document.addEventListener('keydown', function(e){
 })
 
 clickarea.addEventListener('touchstart', handleClick)
-
