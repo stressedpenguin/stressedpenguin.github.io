@@ -113,7 +113,37 @@ setTimeout(function(){
 }
 
 function endTest(){
+     let analyzed = results.slice(6,25)
+    let correctCount = 0
 
+analyzed.forEach(t => {
+    if(t.correct) correctCount++
+})
+
+let accuracy = correctCount / analyzed.length
+let rts = []
+
+analyzed.forEach(t => {
+    if(t.correct && t.rt) rts.push(t.rt)
+})
+rts.sort((a,b)=>a-b)
+
+let medianRT
+
+if(rts.length % 2 === 0){
+    medianRT = (rts[rts.length/2 - 1] + rts[rts.length/2]) / 2
+}else{
+    medianRT = rts[Math.floor(rts.length/2)]
+}
+let stroopSummary = {
+    accuracy: accuracy,
+    medianRT: medianRT
+}
+
+sessionStorage.setItem("stroopSummary", JSON.stringify(stroopSummary))
+
+
+    
     experimentFinished = true
 
     document.getElementById("stimulus").textContent = "Test finished"
@@ -124,8 +154,6 @@ function endTest(){
 
     document.getElementById("trialinfo").innerHTML =
         "Average RT: " + Math.round(avg) + " ms<br>" +
-        "Correct: " + correctCount + "<br>" +
-        "Wrong: " + wrongCount + "<br><br>" +
         "<button onclick=\"window.location.href='4nback.html'\">Next Test</button>"
 }
 
