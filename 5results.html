@@ -19,6 +19,11 @@
 <h2>2-Back Test</h2>
 <pre id="nback"></pre>
 
+<h2>nback wawa</h2>
+<p id="nbackscore"></p>
+
+<h2>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h2>
+
 <script>
 
 // REACTION TEST
@@ -27,6 +32,7 @@ let reaction = JSON.parse(sessionStorage.getItem("reactionResults"))
 if(reaction){
     document.getElementById("reaction").textContent =
         reaction.join(" ms\n") + " ms"
+
 }else{
     document.getElementById("reaction").textContent = "No data"
 }
@@ -50,7 +56,7 @@ if(stroop){
 }
 
 
-// NBACK TEST
+// NBACK TEST raw
 let nback = JSON.parse(sessionStorage.getItem("nbackResults"))
 
 if(nback){
@@ -67,6 +73,34 @@ if(nback){
     document.getElementById("nback").textContent = "No data"
 }
 
+// NBACK TEST real
+let nbackSummary = JSON.parse(sessionStorage.getItem("nbackSummary"))
+
+if(nbackSummary){
+
+    let text =
+    "Accuracy: " + (nbackSummary.accuracy*100).toFixed(1) + "%<br>" +
+    "d′: " + nbackSummary.dprime.toFixed(2)
+
+    document.getElementById("nbackscore").innerHTML = text
+
+}else{
+    document.getElementById("nbackscore").textContent = "No data"
+}
+
+//srtroop wawaawawawawwawawa
+// STROOP TEST
+let stroop2 = JSON.parse(sessionStorage.getItem("stroopSummary"))
+
+if(stroop2){
+
+    document.getElementById("stroop").innerHTML =
+    "Accuracy: " + (stroop2.accuracy*100).toFixed(1) + "%<br>" +
+    "Median RT: " + stroop2.medianRT.toFixed(0) + " ms"}
+
+else{
+    document.getElementById("stroop").textContent = "No data"
+}
 </script>
 
 </body>
