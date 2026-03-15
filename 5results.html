@@ -13,6 +13,9 @@
 <h2>Reaction Test</h2>
 <pre id="reaction"></pre>
 
+<h2>Frolicsome Average Reaction Time (FART)</h2>
+<p><span id="avgRT"></span></p>
+
 <h2>Stroop Test</h2>
 <pre id="stroop"></pre>
 
@@ -37,6 +40,24 @@ if(reaction){
     document.getElementById("reaction").textContent = "No data"
 }
 
+//FART
+if(reaction){
+
+    let analyzed = reaction.slice(1,9) // trials 2–9
+
+    let filtered = analyzed.filter(rt => rt <= 1000)
+
+    let sum = filtered.reduce((a,b)=>a+b,0)
+
+    let avgRT = filtered.length ? sum / filtered.length : 0
+
+    document.getElementById("avgRT").textContent =
+        avgRT.toFixed(1) + " ms"
+
+}else{
+    document.getElementById("avgRT").textContent = "No data"
+}
+    
 
 // STROOP TEST
 let stroop = JSON.parse(sessionStorage.getItem("stroopResults"))
