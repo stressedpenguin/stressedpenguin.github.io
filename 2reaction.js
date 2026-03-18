@@ -76,9 +76,6 @@ const handleClick = event => {
 	            clickarea.classList.remove('green')
 	            updateText("Test finished, scroll down for next test")
 	            sessionStorage.setItem("reactionResults", JSON.stringify(results))
-                note.textContent = "Results: " + results.join(", ") + " ms"
-            let avgRT = calculateAverageRT()
-			note.textContent += " | Avg (trials 2-9): " + avgRT.toFixed(1) + " ms"
 				let nextButton = document.createElement("button")
 	            nextButton.textContent = "Next Test"
 	            nextButton.style.fontSize = "20px"
