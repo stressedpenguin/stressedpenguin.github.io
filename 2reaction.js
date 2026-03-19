@@ -74,7 +74,7 @@ const handleClick = event => {
                 if(trialCount >= maxTrials){
 				testFinished = true
 	            clickarea.classList.remove('green')
-	            updateText("Test finished, scroll down for next test")
+	            updateText("scroll down PLEase")
 	            sessionStorage.setItem("reactionResults", JSON.stringify(results))
 				let nextButton = document.createElement("button")
 	            nextButton.textContent = "Next Test"
