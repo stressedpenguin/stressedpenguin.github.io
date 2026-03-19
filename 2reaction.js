@@ -78,8 +78,10 @@ const handleClick = event => {
 	            sessionStorage.setItem("reactionResults", JSON.stringify(results))
 				let nextButton = document.createElement("button")
 	            nextButton.textContent = "Next Test"
-	            nextButton.style.fontSize = "20px"
-	            nextButton.style.marginTop = "20px"
+	            nextButton.style.fontSize = "40px"
+				nextButton.style.padding = "20px 40px"
+				nextButton.style.marginTop = "30px"
+				nextButton.style.cursor = "pointer"
 
 	            nextButton.onclick = function(){
 		        window.location.href = "3STROOP.html"
@@ -91,7 +93,7 @@ const handleClick = event => {
 
                 else{
                 clickarea.classList.remove('green')
-                updateText(`${reaction} ms`, `Trial ${trialCount} / ${maxTrials}`)
+                updateText("keep going!!1!!1!", `Trial ${trialCount} / ${maxTrials}`)
             }
 		}
 	}
